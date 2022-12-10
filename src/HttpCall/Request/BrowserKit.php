@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\HttpCall\Request;
 
 use Behat\Mink\Driver\Goutte\Client as GoutteClient;
@@ -49,6 +51,7 @@ class BrowserKit
         } else {
             $request = $client->getRequest();
         }
+
         return $request;
     }
 
@@ -60,7 +63,7 @@ class BrowserKit
     public function send($method, $url, $parameters = [], $files = [], $content = null, $headers = [])
     {
         foreach ($files as $originalName => &$file) {
-            if (is_string($file)) {
+            if (\is_string($file)) {
                 $file = new UploadedFile($file, $originalName);
             }
         }
@@ -81,11 +84,11 @@ class BrowserKit
         return $this->mink->getSession()->getPage();
     }
 
-    public function setHttpHeader($name, $value)
+    public function setHttpHeader($name, $value): void
     {
         $client = $this->mink->getSession()->getDriver()->getClient();
         if (method_exists($client, 'setHeader')) {
-            /**
+            /*
              * @var \Goutte\Client $client
              */
             $client->setHeader($name, $value);
@@ -100,7 +103,7 @@ class BrowserKit
 
             // CONTENT_* are not prefixed with HTTP_ in PHP when building $_SERVER
             if (!isset($contentHeaders[$name])) {
-                $name = 'HTTP_' . $name;
+                $name = 'HTTP_'.$name;
             }
             /* taken from Behat\Mink\Driver\BrowserKitDriver::setRequestHeader */
 
@@ -112,7 +115,7 @@ class BrowserKit
     {
         return array_change_key_case(
             $this->mink->getSession()->getResponseHeaders(),
-            CASE_LOWER
+            \CASE_LOWER
         );
     }
 
@@ -130,18 +133,17 @@ class BrowserKit
 
         if (isset($headers[$name])) {
             $value = $headers[$name];
-            if (!is_array($headers[$name])) {
+            if (!\is_array($headers[$name])) {
                 $value = [$headers[$name]];
             }
         } else {
-            throw new \OutOfBoundsException(
-                "The header '$name' doesn't exist"
-            );
+            throw new \OutOfBoundsException("The header '$name' doesn't exist");
         }
+
         return $value;
     }
 
-    protected function resetHttpHeaders()
+    protected function resetHttpHeaders(): void
     {
         /** @var GoutteClient|BrowserKitClient $client */
         $client = $this->mink->getSession()->getDriver()->getClient();

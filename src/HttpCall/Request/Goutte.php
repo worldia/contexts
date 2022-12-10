@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\HttpCall\Request;
 
 class Goutte extends BrowserKit
@@ -20,22 +22,22 @@ class Goutte extends BrowserKit
         return $page;
     }
 
-    public function setHttpHeader($name, $value)
+    public function setHttpHeader($name, $value): void
     {
         /* taken from Behat\Mink\Driver\BrowserKitDriver::setRequestHeader */
-        $contentHeaders = array('CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true);
+        $contentHeaders = ['CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true];
         $name = str_replace('-', '_', strtoupper($name));
 
         // CONTENT_* are not prefixed with HTTP_ in PHP when building $_SERVER
         if (!isset($contentHeaders[$name])) {
-            $name = 'HTTP_' . $name;
+            $name = 'HTTP_'.$name;
         }
         /* taken from Behat\Mink\Driver\BrowserKitDriver::setRequestHeader */
 
         $this->requestHeaders[$name] = $value;
     }
 
-    protected function resetHttpHeaders()
+    protected function resetHttpHeaders(): void
     {
         $this->requestHeaders = [];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Json;
 
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -20,14 +22,14 @@ class Json
 
     public function read($expression, PropertyAccessor $accessor)
     {
-        if (is_array($this->content)) {
-            $expression =  preg_replace('/^root/', '', $expression);
+        if (\is_array($this->content)) {
+            $expression = preg_replace('/^root/', '', $expression);
         } else {
-            $expression =  preg_replace('/^root./', '', $expression);
+            $expression = preg_replace('/^root./', '', $expression);
         }
 
         // If root asked, we return the entire content
-        if (strlen(trim($expression)) <= 0) {
+        if ('' === trim($expression)) {
             return $this->content;
         }
 
@@ -36,10 +38,10 @@ class Json
 
     public function encode($pretty = true)
     {
-        $flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+        $flags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 
-        if (true === $pretty && defined('JSON_PRETTY_PRINT')) {
-            $flags |= JSON_PRETTY_PRINT;
+        if (true === $pretty && \defined('JSON_PRETTY_PRINT')) {
+            $flags |= \JSON_PRETTY_PRINT;
         }
 
         return json_encode($this->content, $flags);
@@ -54,7 +56,7 @@ class Json
     {
         $result = json_decode($content);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (\JSON_ERROR_NONE !== json_last_error()) {
             throw new \Exception("The string '$content' is not valid json");
         }
 

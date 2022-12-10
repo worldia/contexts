@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Context;
 
 use Behat\Behat\Context\TranslatableContext;
@@ -7,16 +9,17 @@ use Behat\MinkExtension\Context\RawMinkContext;
 
 abstract class BaseContext extends RawMinkContext implements TranslatableContext
 {
-    use \Behatch\Html;
     use \Behatch\Asserter;
+    use \Behatch\Html;
 
     public static function getTranslationResources()
     {
-        return glob(__DIR__ . '/../../i18n/*.xliff');
+        return glob(__DIR__.'/../../i18n/*.xliff');
     }
 
     /**
-     * en
+     * en.
+     *
      * @transform /^(0|[1-9]\d*)(?:st|nd|rd|th)?$/
      *
      * fr
@@ -30,9 +33,8 @@ abstract class BaseContext extends RawMinkContext implements TranslatableContext
      */
     public function castToInt($count)
     {
-        if (intval($count) < PHP_INT_MAX) {
-
-            return intval($count);
+        if ((int) $count < \PHP_INT_MAX) {
+            return (int) $count;
         }
 
         return $count;

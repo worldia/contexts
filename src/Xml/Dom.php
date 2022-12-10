@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Xml;
 
 class Dom
@@ -8,55 +10,55 @@ class Dom
 
     public function __construct($content)
     {
-        $this->dom = new \DomDocument();
+        $this->dom = new \DOMDocument();
         $this->dom->strictErrorChecking = false;
         $this->dom->validateOnParse = false;
         $this->dom->preserveWhiteSpace = true;
-        $this->dom->loadXML($content, LIBXML_PARSEHUGE);
+        $this->dom->loadXML($content, \LIBXML_PARSEHUGE);
         $this->throwError();
     }
 
     public function __toString()
     {
         $this->dom->formatOutput = true;
+
         return $this->dom->saveXML();
     }
 
-    public function validate()
+    public function validate(): void
     {
         $this->dom->validate();
         $this->throwError();
     }
 
-    public function validateXsd($xsd)
+    public function validateXsd($xsd): void
     {
         $this->dom->schemaValidateSource($xsd);
         $this->throwError();
     }
 
-    public function validateNg($ng)
+    public function validateNg($ng): void
     {
         try {
             $this->dom->relaxNGValidateSource($ng);
             $this->throwError();
-        }
-        catch(\DOMException $e) {
+        } catch (\DOMException $e) {
             throw new \RuntimeException($e->getMessage());
         }
     }
 
     public function xpath($element)
     {
-        $xpath = new \DOMXpath($this->dom);
+        $xpath = new \DOMXPath($this->dom);
         $this->registerNamespace($xpath);
 
         $element = $this->fixNamespace($element);
         $elements = $xpath->query($element);
 
-        return ($elements === false) ? new \DOMNodeList() : $elements;
+        return (false === $elements) ? new \DOMNodeList() : $elements;
     }
 
-    private function registerNamespace(\DOMXpath $xpath)
+    private function registerNamespace(\DOMXPath $xpath): void
     {
         $namespaces = $this->getNamespaces();
 
@@ -69,7 +71,7 @@ class Dom
     }
 
     /**
-     * "fix" queries to the default namespace if any namespaces are defined
+     * "fix" queries to the default namespace if any namespaces are defined.
      */
     private function fixNamespace($element)
     {
@@ -81,6 +83,7 @@ class Dom
             }
             $element = preg_replace('/\/(\w+)(\[[^]]+\])?$/', '/rootns:$1$2', $element);
         }
+
         return $element;
     }
 
@@ -95,16 +98,17 @@ class Dom
     public function getNamespaces()
     {
         $xml = simplexml_import_dom($this->dom);
+
         return $xml->getNamespaces(true);
     }
 
-    private function throwError()
+    private function throwError(): void
     {
         $error = libxml_get_last_error();
         if (!empty($error)) {
             // https://bugs.php.net/bug.php?id=46465
-            if ($error->message != 'Validation failed: no DTD found !') {
-                throw new \DomException($error->message . ' at line ' . $error->line);
+            if ('Validation failed: no DTD found !' != $error->message) {
+                throw new \DOMException($error->message.' at line '.$error->line);
             }
         }
     }

@@ -1,14 +1,12 @@
 <?php
 
-namespace Behatch\Tests\Units\Json;
+declare(strict_types=1);
 
-use JsonSchema\Validator;
-use JsonSchema\Uri\UriRetriever;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+namespace Behatch\Tests\Units\Json;
 
 class JsonInspector extends \atoum
 {
-    public function test_evaluate()
+    public function test_evaluate(): void
     {
         $json = new \Behatch\Json\Json('{ "foo": { "bar": "foobar" } }');
         $inspector = $this->newTestedInstance('php');
@@ -18,18 +16,18 @@ class JsonInspector extends \atoum
             ->isEqualTo('foobar');
     }
 
-    public function test_evaluate_invalid()
+    public function test_evaluate_invalid(): void
     {
         $json = new \Behatch\Json\Json('{}');
         $inspector = $this->newTestedInstance('php');
 
-        $this->exception(function () use($json, $inspector) {
+        $this->exception(function () use ($json, $inspector): void {
             $inspector->evaluate($json, 'foo.bar');
         })
         ->hasMessage("Failed to evaluate expression 'foo.bar'");
     }
 
-    public function test_evaluate_javascript_mode()
+    public function test_evaluate_javascript_mode(): void
     {
         $json = new \Behatch\Json\Json('{ "foo": { "bar": "foobar" } }');
         $inspector = $this->newTestedInstance('javascript');
@@ -39,7 +37,7 @@ class JsonInspector extends \atoum
             ->isEqualTo('foobar');
     }
 
-    public function test_evaluate_php_mode()
+    public function test_evaluate_php_mode(): void
     {
         $json = new \Behatch\Json\Json('{ "foo": { "bar": "foobar" } }');
         $inspector = $this->newTestedInstance('php');
@@ -49,7 +47,7 @@ class JsonInspector extends \atoum
             ->isEqualTo('foobar');
     }
 
-    public function test_validate()
+    public function test_validate(): void
     {
         $json = new \Behatch\Json\Json('{ "foo": { "bar": "foobar" } }');
         $inspector = $this->newTestedInstance('php');

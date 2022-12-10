@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Context\ContextClass;
 
 use Behat\Behat\Context\ContextClass\ClassResolver as BaseClassResolver;
@@ -8,7 +10,7 @@ class ClassResolver implements BaseClassResolver
 {
     public function supportsClass($contextClass)
     {
-        return (strpos($contextClass, 'behatch:context:') === 0);
+        return 0 === strpos($contextClass, 'behatch:context:');
     }
 
     public function resolveClass($contextClass)
@@ -17,6 +19,6 @@ class ClassResolver implements BaseClassResolver
             return str_replace(':', '\\', strtoupper($matches[0]));
         }, $contextClass);
 
-        return $className . 'Context';
+        return $className.'Context';
     }
 }

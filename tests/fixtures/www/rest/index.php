@@ -1,49 +1,49 @@
-<?php
+<?php declare(strict_types=1);
 
-error_reporting(E_ALL);
+error_reporting(\E_ALL);
 
-header('Date: ' . date('c'));
-header('Expires: ' . date('c', time() + 60));
+header('Date: '.date('c'));
+header('Expires: '.date('c', time() + 60));
 header('Content-Type: text/html; charset=utf-8');
 
 $body = file_get_contents('php://input');
-if ($_SERVER['REQUEST_METHOD'] === 'PUT' && !empty($body)) {
+if ('PUT' === $_SERVER['REQUEST_METHOD'] && !empty($body)) {
     // For PUT with body we simulate an empty response with 204
-    header("HTTP/1.0 204 No Content");
-    die();
+    header('HTTP/1.0 204 No Content');
+    exit;
 }
 
 ?>
 
-You have sent a <?php print $_SERVER['REQUEST_METHOD']; ?> request.
+You have sent a <?php echo $_SERVER['REQUEST_METHOD']; ?> request.
 
-<?php print sizeof($_SERVER); ?> header(s) received.
-<?php foreach(array_filter($_SERVER) as $key => $value): ?>
-  <br /><?php print $key ?> : <?php print $value; ?>
-<?php endforeach; ?>
+<?php echo count($_SERVER); ?> header(s) received.
+<?php foreach (array_filter($_SERVER) as $key => $value) { ?>
+  <br /><?php echo $key; ?> : <?php echo $value; ?>
+<?php } ?>
 
-<?php if(sizeof($_REQUEST) == 0): ?>
+<?php if (0 == count($_REQUEST)) { ?>
   <br />No parameter received.
-<?php else: ?>
-  <br /><?php print sizeof($_REQUEST); ?> parameter(s) received.
-  <?php foreach($_REQUEST as $key => $value): ?>
-    <br /><?php print $key ?> : <?php print $value; ?>
-  <?php endforeach; ?>
-<?php endif; ?>
+<?php } else { ?>
+  <br /><?php echo count($_REQUEST); ?> parameter(s) received.
+  <?php foreach ($_REQUEST as $key => $value) { ?>
+    <br /><?php echo $key; ?> : <?php echo $value; ?>
+  <?php } ?>
+<?php } ?>
 
-<?php if(sizeof($_FILES) == 0): ?>
+<?php if (0 == count($_FILES)) { ?>
   <br />No files received.
-<?php else: ?>
-  <br /><?php print sizeof($_FILES); ?> file(s) received.
-  <?php foreach($_FILES as $key => $value): ?>
-    <br /><?php print $key ?> - name : <?php print $value['name']; ?>
-    <br /><?php print $key ?> - error : <?php print $value['error']; ?>
-    <br /><?php print $key ?> - size : <?php print $value['size']; ?>
-  <?php endforeach; ?>
-<?php endif; ?>
+<?php } else { ?>
+  <br /><?php echo count($_FILES); ?> file(s) received.
+  <?php foreach ($_FILES as $key => $value) { ?>
+    <br /><?php echo $key; ?> - name : <?php echo $value['name']; ?>
+    <br /><?php echo $key; ?> - error : <?php echo $value['error']; ?>
+    <br /><?php echo $key; ?> - size : <?php echo $value['size']; ?>
+  <?php } ?>
+<?php } ?>
 
-<?php if($body == null): ?>
+<?php if (null == $body) { ?>
   <br />No body received.
-<?php else: ?>
-  <br />Body : <?php print $body; ?>
-<?php endif; ?>
+<?php } else { ?>
+  <br />Body : <?php echo $body; ?>
+<?php } ?>

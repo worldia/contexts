@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\HttpCall;
 
 use Behat\Mink\Mink;
@@ -14,7 +16,6 @@ class Request
 
     /**
      * Request constructor.
-     * @param Mink $mink
      */
     public function __construct(Mink $mink)
     {
@@ -23,12 +24,10 @@ class Request
 
     /**
      * @param string $name
-     * @param mixed $arguments
-     * @return mixed
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array([$this->getClient(), $name], $arguments);
+        return \call_user_func_array([$this->getClient(), $name], $arguments);
     }
 
     /**

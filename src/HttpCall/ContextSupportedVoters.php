@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\HttpCall;
 
 class ContextSupportedVoters implements ContextSupportedVoter
 {
     private $voters;
 
-    public function __construct(array $voters = array())
+    public function __construct(array $voters = [])
     {
         foreach ($voters as $voter) {
             $this->register($voter);
         }
     }
 
-    public function register(ContextSupportedVoter $voter)
+    public function register(ContextSupportedVoter $voter): void
     {
         $this->voters[] = $voter;
     }

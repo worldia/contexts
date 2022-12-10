@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Json;
 
-use JsonSchema\Validator;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class JsonInspector
@@ -13,14 +14,12 @@ class JsonInspector
 
     public function __construct($evaluationMode)
     {
-        $magicMethods = defined(PropertyAccessor::class.'::DISALLOW_MAGIC_METHODS')
+        $magicMethods = \defined(PropertyAccessor::class.'::DISALLOW_MAGIC_METHODS')
             ? PropertyAccessor::MAGIC_GET | PropertyAccessor::MAGIC_SET
-            : false
-        ;
-        $throwException = defined(PropertyAccessor::class.'::DO_NOT_THROW')
+            : false;
+        $throwException = \defined(PropertyAccessor::class.'::DO_NOT_THROW')
             ? PropertyAccessor::THROW_ON_INVALID_INDEX | PropertyAccessor::THROW_ON_INVALID_PROPERTY_PATH
-            : true
-        ;
+            : true;
 
         $this->evaluationMode = $evaluationMode;
         $this->accessor = new PropertyAccessor($magicMethods, $throwException);
@@ -28,7 +27,7 @@ class JsonInspector
 
     public function evaluate(Json $json, $expression)
     {
-        if ($this->evaluationMode === 'javascript') {
+        if ('javascript' === $this->evaluationMode) {
             $expression = str_replace('->', '.', $expression);
         }
 
@@ -43,7 +42,7 @@ class JsonInspector
     {
         $validator = new \JsonSchema\Validator();
 
-        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever, new \JsonSchema\Uri\UriResolver);
+        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
         $schema->resolve($resolver);
 
         return $schema->validate($json, $validator);

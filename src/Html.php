@@ -1,8 +1,8 @@
 <?php
 
-namespace Behatch;
+declare(strict_types=1);
 
-use Behat\MinkExtension\Context\RawMinkContext;
+namespace Behatch;
 
 trait Html
 {
@@ -18,7 +18,8 @@ trait Html
         }
 
         $elements = $parents[$index - 1]->findAll('css', $element);
-        return count($elements);
+
+        return \count($elements);
     }
 
     protected function findElement($selector, $locator, $index)

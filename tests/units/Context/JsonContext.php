@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\Tests\Units\Context;
 
-use atoum;
 use Behat\Gherkin\Node\TableNode;
 use Behatch\HttpCall\HttpCallResult;
 use Behatch\HttpCall\HttpCallResultPool;
 
-class JsonContext extends atoum
+class JsonContext extends \atoum
 {
     /**
      * @var HttpCallResultPool
      */
     private $httpCallResultPool;
 
-    public function beforeTestMethod($methodName)
+    public function beforeTestMethod($methodName): void
     {
         $this->mockGenerator->orphanize('__construct');
         $httpCallResult = $this->newMockInstance(HttpCallResult::class);
@@ -36,7 +37,7 @@ class JsonContext extends atoum
         $this->httpCallResultPool->getMockController()->getResult = $httpCallResult;
     }
 
-    public function testTheJsonNodeShouldBeEqualTo()
+    public function testTheJsonNodeShouldBeEqualTo(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -44,14 +45,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeEqualTo('a string node', 'some string'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeEqualTo('a string node', 'expectedstring');
             })
-                ->hasMessage("The node 'a string node' value is '\"some string\"', 'expectedstring' expected")
-        ;
+                ->hasMessage("The node 'a string node' value is '\"some string\"', 'expectedstring' expected");
     }
 
-    public function testTheJsonNodesShouldBeEqualTo()
+    public function testTheJsonNodesShouldBeEqualTo(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -63,17 +63,17 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodesShouldBeEqualTo($validTableNode))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $invalidTableNode = new TableNode([
                     1 => ['a string node', 'may the force'],
                     2 => ['another string node', 'be with you'],
                 ]);
                 $this->testedInstance->theJsonNodesShouldBeEqualTo($invalidTableNode);
             })
-                ->hasMessage("The node 'a string node' value is '\"some string\"', 'may the force' expected\nThe node 'another string node' value is '\"some other string\"', 'be with you' expected")
-        ;
+                ->hasMessage("The node 'a string node' value is '\"some string\"', 'may the force' expected\nThe node 'another string node' value is '\"some other string\"', 'be with you' expected");
     }
-    public function testTheJsonNodeShouldMatch()
+
+    public function testTheJsonNodeShouldMatch(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -81,14 +81,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldMatch('a string node', '/some/'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldMatch('a string node', '/nomatch/');
             })
-                ->hasMessage("The node 'a string node' value is '\"some string\"', '/nomatch/' pattern expected")
-        ;
+                ->hasMessage("The node 'a string node' value is '\"some string\"', '/nomatch/' pattern expected");
     }
 
-    public function testTheJsonNodeShouldBeNull()
+    public function testTheJsonNodeShouldBeNull(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -96,14 +95,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeNull('a null node'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeNull('a string node');
             })
-                ->hasMessage("The node 'a string node' value is '\"some string\"', null expected")
-        ;
+                ->hasMessage("The node 'a string node' value is '\"some string\"', null expected");
     }
 
-    public function testTheJsonNodeShouldNotBeNull()
+    public function testTheJsonNodeShouldNotBeNull(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -111,14 +109,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldNotBeNull('a string node'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldNotBeNull('a null node');
             })
-                ->hasMessage("The node 'a null node' value is null, non-null value expected")
-        ;
+                ->hasMessage("The node 'a null node' value is null, non-null value expected");
     }
 
-    public function testTheJsonNodeShouldBeTrue()
+    public function testTheJsonNodeShouldBeTrue(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -126,14 +123,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeTrue('a true node'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeTrue('a false node');
             })
-                ->hasMessage("The node 'a false node' value is 'false', 'true' expected")
-        ;
+                ->hasMessage("The node 'a false node' value is 'false', 'true' expected");
     }
 
-    public function testTheJsonNodeShouldBeFalse()
+    public function testTheJsonNodeShouldBeFalse(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -141,14 +137,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeFalse('a false node'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeFalse('a true node');
             })
-                ->hasMessage("The node 'a true node' value is 'true', 'false' expected")
-        ;
+                ->hasMessage("The node 'a true node' value is 'true', 'false' expected");
     }
 
-    public function testTheJsonNodeShouldBeEqualToTheString()
+    public function testTheJsonNodeShouldBeEqualToTheString(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -156,14 +151,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeEqualToTheString('a string node', 'some string'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeEqualToTheString('a string node', 'expected');
             })
-                ->hasMessage("The node 'a string node' value is '\"some string\"', string 'expected' expected")
-        ;
+                ->hasMessage("The node 'a string node' value is '\"some string\"', string 'expected' expected");
     }
 
-    public function testTheJsonNodeShouldBeEqualToTheNumber()
+    public function testTheJsonNodeShouldBeEqualToTheNumber(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -171,14 +165,13 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldBeEqualToTheNumber('a number node', 3))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldBeEqualToTheNumber('a number node', 2);
             })
-                ->hasMessage("The node 'a number node' value is '3', number '2' expected")
-        ;
+                ->hasMessage("The node 'a number node' value is '3', number '2' expected");
     }
 
-    public function testTheJsonNodeShouldExist()
+    public function testTheJsonNodeShouldExist(): void
     {
         $this
             ->given($this->newTestedInstance($this->httpCallResultPool))
@@ -186,10 +179,9 @@ class JsonContext extends atoum
 
             ->if($this->testedInstance->theJsonNodeShouldExist('a string node'))
 
-            ->exception(function () {
+            ->exception(function (): void {
                 $this->testedInstance->theJsonNodeShouldExist('invalid key');
             })
-                ->hasMessage("The node 'invalid key' does not exist.")
-        ;
+                ->hasMessage("The node 'invalid key' does not exist.");
     }
 }

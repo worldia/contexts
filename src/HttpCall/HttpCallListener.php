@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behatch\HttpCall;
 
-use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Mink\Mink;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,7 +28,7 @@ class HttpCallListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-           StepTested::AFTER => 'afterStep'
+            StepTested::AFTER => 'afterStep',
         ];
     }
 

@@ -421,8 +421,8 @@ class JsonContext extends BaseContext
         }
     }
 
-    public static function reespaceSpecialGherkinValue(string $value): string
+    public static function reespaceSpecialGherkinValue(mixed $value): string
     {
-        return str_replace('\\n', "\n", $value);
+        return str_replace('\\n', "\n", (string) $value);
     }
 }

@@ -64,7 +64,7 @@ class BrowserKit
     {
         foreach ($files as $originalName => &$file) {
             if (\is_string($file)) {
-                $file = new UploadedFile($file, $originalName);
+                $file = new UploadedFile($file, (string) $originalName);
             }
         }
 

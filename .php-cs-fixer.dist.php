@@ -111,6 +111,7 @@ return (new PhpCsFixer\Config())
                 'property',
             ],
         ],
+        'declare_strict_types' => false,
     ])
     ->setFinder($finder);
 

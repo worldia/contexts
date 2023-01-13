@@ -23,7 +23,7 @@ class DebugContext extends BaseContext
     /**
      * Pauses the scenario until the user presses a key. Useful when debugging a scenario.
      *
-     * @Then(I)put a breakpoint
+     * @Then (I )put a breakpoint
      */
     public function iPutABreakpoint(): void
     {
